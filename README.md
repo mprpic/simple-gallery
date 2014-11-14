@@ -1,7 +1,7 @@
 Simple HTML Gallery
 ===================
 
-Create an single-page HTML gallery with:
+Create a single-page HTML gallery with:
 
     $ ./create_gallery vacation-photos index.html
 
