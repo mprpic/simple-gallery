@@ -58,10 +58,10 @@ def main():
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
 
-    # Load up Jinja template and pass data
+    # Load up Jinja template and pass sorted data
     env = Environment(loader=FileSystemLoader(script_dir))
     template = env.get_template(GALLERY_TEMPLATE)
-    rendered_html = template.render(title=title, images=img_file_list)
+    rendered_html = template.render(title=title, images=sorted(img_file_list))
 
     # Create output directory
     print("Creating directory: %s" % out_dir)
