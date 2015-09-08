@@ -21,8 +21,22 @@
 
           // Size all images to how big the browser is
           $('img').each( function() {
-              var window_height = $(window).height()
-              $(this).height(window_height - 70)
+              var windowHeight = $(window).height()
+              var windowWidth = $(window).width()
+              var imgHeight = $(this).height()
+              var imgWidth = $(this).width()
+              var ratio = 0
+
+              if (imgHeight > windowHeight){
+                  $(this).height(windowHeight - 70)
+                  ratio = windowHeight / imgHeight
+                  imgHeight = imgHeight * ratio
+                  imgWidth = imgWidth * ratio
+              };
+
+              if (imgWidth > windowWidth){
+                  $(this).width(windowWidth - 70)
+              }
           });
 
           // Make the first image of the gallery visible
