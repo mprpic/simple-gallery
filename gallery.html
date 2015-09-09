@@ -17,26 +17,18 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript">
-      $(document).ready(function(){
+      $(window).load(function(){
 
           // Size all images to how big the browser is
           $('img').each( function() {
-              var windowHeight = $(window).height()
-              var windowWidth = $(window).width()
+              var windowHeight = $(window).height() - 70
+              var windowWidth = $(window).width() -70
               var imgHeight = $(this).height()
               var imgWidth = $(this).width()
-              var ratio = 0
+              var ratio = Math.min(windowWidth / imgWidth, windowHeight / imgHeight)
 
-              if (imgHeight > windowHeight){
-                  $(this).height(windowHeight - 70)
-                  ratio = windowHeight / imgHeight
-                  imgHeight = imgHeight * ratio
-                  imgWidth = imgWidth * ratio
-              };
-
-              if (imgWidth > windowWidth){
-                  $(this).width(windowWidth - 70)
-              }
+              $(this).height(imgHeight * ratio)
+              $(this).width(imgWidth * ratio)
           });
 
           // Make the first image of the gallery visible
