@@ -59,6 +59,16 @@
               }
               return false;
           });
+
+          // Capture left and right arrow key presses to cycle through images
+          $(document).keypress(function(e){
+              if(e.keyCode == 39){
+                  $("#next").click();
+              }
+              if(e.keyCode == 37){
+                  $("#back").click();
+              }
+          });
       });
     </script>
   </head>
