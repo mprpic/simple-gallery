@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import os
 import sys
 import shutil
@@ -10,36 +8,38 @@ except ImportError:
     print("ERROR: missing jinja2 module")
     sys.exit(1)
 
-GALLERY_TEMPLATE="./gallery.html"
-IMAGE_EXT = [".png", ".jpg", ".jpeg"]
+GALLERY_TEMPLATE = './gallery.html'
+IMAGE_EXT = ['.png', '.jpg', '.jpeg']
+
 
 def main():
 
-    p = optparse.OptionParser(description="Generate a simple one page HTML gallery.", usage="%prog [-h|--help] -i DIR [-o OUTDIR]")
-    p.add_option('-i', '--input', dest="in_dir",
-                 action="store", help="Input directory where images are located")
-    p.add_option('-o', '--output', dest="out_dir",
-                 action="store", help="Output directory (default is ./gallery)")
-    p.add_option('-t', '--title', dest="title",
-                 action="store", help="Title to be used in the gallery's HTML")
+    p = optparse.OptionParser(description='Generate a simple one-page HTML gallery.',
+                              usage='%prog [-h|--help] -i DIR [-o OUTDIR]')
+    p.add_option('-i', '--input', dest='in_dir',
+                 action='store', help='Input directory where images are located')
+    p.add_option('-o', '--output', dest='out_dir',
+                 action='store', help='Output directory (default: "./gallery")')
+    p.add_option('-t', '--title', dest='title',
+                 action='store', help="Title to be used in the gallery's HTML (default: Gallery)")
     (opts, args) = p.parse_args()
 
     if not opts.in_dir:
-        p.error("You must specify an input directory!")
+        p.error('You must specify an input directory!')
         sys.exit(1)
 
     if not os.path.isdir(opts.in_dir):
-        p.error("The specified location is not a valid directory")
+        p.error('The specified location is not a valid directory')
 
-    # Default title is "Gallery"
-    title = opts.title if opts.title else "Gallery"
+    # Default title is 'Gallery'
+    title = opts.title if opts.title else 'Gallery'
 
     # Default output is './gallery'
-    out_dir = opts.out_dir.rstrip("/") if opts.out_dir else "./gallery"
+    out_dir = opts.out_dir.rstrip('/') if opts.out_dir else './gallery'
 
     # Overwriting is dangerous, quitting is safer
     if os.path.exists(out_dir):
-        print("ERROR: Directory %s already exists. Remove it or specify a different one." % out_dir)
+        print('ERROR: Directory %s already exists. Remove it or specify a different one.' % out_dir)
         sys.exit(1)
 
     file_list = os.listdir(opts.in_dir)
@@ -50,34 +50,29 @@ def main():
         if os.path.splitext(f)[1].lower() in IMAGE_EXT:
             img_file_list.append(f)
         else:
-            print("Skipping %s -- not an image file" % f)
+            print('Skipping %s -- not an image file' % f)
 
     if not img_file_list:
-        print("ERROR: Did not locate any images files the specified directory")
+        print('ERROR: Did not locate any images files the specified directory')
         sys.exit(1)
 
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-
     # Load up Jinja template and pass sorted data
-    env = Environment(loader=FileSystemLoader(script_dir))
-    template = env.get_template(GALLERY_TEMPLATE)
+    jinja_env = Environment(loader=FileSystemLoader('./'))
+    template = jinja_env.get_template(GALLERY_TEMPLATE)
     rendered_html = template.render(title=title, images=sorted(img_file_list))
 
     # Create output directory
-    print("Creating directory: %s" % out_dir)
+    print('Creating directory: %s' % out_dir)
     os.makedirs(out_dir)
 
     # Write out HTML file
-    with open(out_dir + "/index.html", "w") as f:
-        f.write(rendered_html.encode("utf8"))
+    with open(os.path.join(out_dir, 'index.html'), 'w') as f:
+        f.write(rendered_html)
 
     # Copy all image files
     for f in img_file_list:
-        shutil.copy("%s/%s" % (opts.in_dir.rstrip("/"), f), out_dir)
+        shutil.copy('%s/%s' % (opts.in_dir.rstrip('/'), f), out_dir)
 
-    # Copy left and righ icons
-    shutil.copy(script_dir + "/left.svg", out_dir)
-    shutil.copy(script_dir + "/right.svg", out_dir)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
