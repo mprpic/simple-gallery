@@ -19,10 +19,6 @@ def main():
                    action='store', help='title to be used in the <title> tag of the HTML (default: Gallery)')
     args = p.parse_args()
 
-    if not args.in_dir:
-        p.error('You must specify an input directory!')
-        sys.exit(1)
-
     if not os.path.isdir(args.in_dir):
         p.error('The specified location is not a valid directory')
 
